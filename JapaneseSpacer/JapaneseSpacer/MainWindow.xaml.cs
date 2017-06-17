@@ -28,8 +28,14 @@ namespace JapaneseSpacer
     private Int32 zoomLevelPercent = 130;
     private Int32 lineSpaceX10 = 20;
 
+    private HashSet<Char> katakanaSet = new HashSet<Char>();
+
     public MainWindow()
     {
+      String katakanaLetters = "ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺーヽヾヿ";
+      foreach (Char c in katakanaLetters)
+        katakanaSet.Add(c);
+
       DataContext = this;
       InitializeComponent();
       typeTimer = new DispatcherTimer();
@@ -65,7 +71,7 @@ namespace JapaneseSpacer
         if (i < sentence.Length - 1) // if not last sentence, append period
           sentence += "。";
 
-        var phonemes = JapanesePhoneticAnalyzer.GetWords(sentence, true).ToList();
+        var phonemes = JapanesePhoneticAnalyzer.GetWords(sentence, false).ToList();
         foreach (var phoneme in phonemes)
         {
           if (phoneme.IsPhraseStart)
@@ -75,7 +81,7 @@ namespace JapaneseSpacer
           // Original text part
           stringBuilder.Append($"<ruby><rb>{phoneme.DisplayText}</rb>");
           // Furigana part
-          if (shouldShowFurigana && phoneme.DisplayText != phoneme.YomiText) // Furigana needs to be displayed
+          if (shouldShowFurigana && phoneme.DisplayText != phoneme.YomiText && !katakanaSet.Contains(phoneme.DisplayText[0])) // Furigana needs to be displayed
             stringBuilder.Append($"<rt>{phoneme.YomiText}</rt>");
           stringBuilder.Append("</ruby>");
         }
