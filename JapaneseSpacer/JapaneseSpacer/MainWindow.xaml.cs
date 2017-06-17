@@ -81,7 +81,8 @@ namespace JapaneseSpacer
           // Original text part
           stringBuilder.Append($"<ruby><rb>{phoneme.DisplayText}</rb>");
           // Furigana part
-          if (shouldShowFurigana && phoneme.DisplayText != phoneme.YomiText && !katakanaSet.Contains(phoneme.DisplayText[0])) // Furigana needs to be displayed
+          if (shouldShowFurigana && phoneme.DisplayText != phoneme.YomiText
+            && !katakanaSet.Contains(phoneme.DisplayText[0]) && Char.IsLetter(phoneme.DisplayText[0])) // Furigana needs to be displayed
             stringBuilder.Append($"<rt>{phoneme.YomiText}</rt>");
           stringBuilder.Append("</ruby>");
         }
