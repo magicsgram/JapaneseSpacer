@@ -14,3 +14,6 @@ Download the latest binary from https://github.com/magicsgram/JapaneseSpacer/raw
 
 # Release 1.0
   - Initial release
+
+# Release 1.1
+  - Fix behavior of adding furigana to katakana letters
