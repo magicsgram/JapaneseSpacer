@@ -10,7 +10,7 @@ Download the latest binary from https://github.com/magicsgram/JapaneseSpacer/raw
 1. Extract the file into a new folder
 2. Run kylecapturetranslator.exe
 3. Type or copy-paste japanese text onto the "text" area to the left.
-4. The spaced(+furigana) result should automatically show up to your left.
+4. The spaced(+furigana) result should automatically show up to the right.
 
 # Release Node
 ## Release 1.0
