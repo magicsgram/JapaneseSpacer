@@ -27,17 +27,27 @@ namespace JapaneseSpacer
     private DispatcherTimer typeTimer;
     private Int32 zoomLevelPercent = 130;
     private Int32 lineSpaceX10 = 20;
+    private String fontFamilyName = "Arial";
 
     private HashSet<Char> katakanaSet = new HashSet<Char>();
 
     public MainWindow()
     {
-      String katakanaLetters = "ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺーヽヾヿ";
-      foreach (Char c in katakanaLetters)
-        katakanaSet.Add(c);
-
       DataContext = this;
       InitializeComponent();
+
+      foreach (FontFamily font in fontComboBox.Items)
+      {
+        if (font.Source == "Arial")
+        {
+          fontComboBox.SelectedItem = font;
+          break;
+        }
+      }
+
+      BuildKatakanaSet();
+
+      // Timer triggers when the user does not edit the textbox for 1 second
       typeTimer = new DispatcherTimer();
       typeTimer.Interval = TimeSpan.FromSeconds(1.0);
       typeTimer.Tick += OnTypeTimer_Tick;
@@ -47,10 +57,22 @@ namespace JapaneseSpacer
       };
     }
 
+    private void BuildKatakanaSet()
+    {
+      String katakanaLetters = "ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺーヽヾヿ";
+      foreach (Char c in katakanaLetters)
+        katakanaSet.Add(c);
+    }
+
     private void ApplyStyle()
     {
-      if (resultBrowser.Document.Body != null)
-        resultBrowser.Document.Body.Style = $"zoom:{zoomLevelPercent}%;line-height:{lineSpaceX10 / 10f};";
+      if (resultBrowser.Document != null)
+        if (resultBrowser.Document.Body != null)
+        {
+          resultBrowser.Document.Body.Style = $"zoom:{zoomLevelPercent}%;" +
+                                              $"line-height:{lineSpaceX10 / 10f};" +
+                                              $"font-family:{fontFamilyName};";
+        }
     }
 
     private void PerformSpacing()
@@ -139,6 +161,13 @@ namespace JapaneseSpacer
         lineSpaceX10 -= 1;
         ApplyStyle();
       }
+    }
+
+    private void OnFontComboBox_SelectionChanged(Object sender, SelectionChangedEventArgs e)
+    {
+      var fontFamily = e.AddedItems[0] as FontFamily;
+      fontFamilyName = fontFamily.Source;
+      ApplyStyle();
     }
   }
 }
