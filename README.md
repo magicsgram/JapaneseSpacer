@@ -1,6 +1,8 @@
 # JapaneseSpacer
 Japanese written texts don't contain spaces. Japanese Spacer adds spaces in between words. It also adds Furigana to help reading.
 
+THIS IS FOR THE BEGINNERS' REFERENCE ONLY! I DO NOT GUARANTEE THE ACCURACY OF THE GLOBALIZATION LIBRARY SHIPPED WITH WIN10.
+
 # Requirements
   - Windows 10 - 32/64 bit
   - .net framework 4.5
