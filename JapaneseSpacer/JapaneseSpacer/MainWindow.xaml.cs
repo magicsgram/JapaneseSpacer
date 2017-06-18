@@ -25,9 +25,19 @@ namespace JapaneseSpacer
   public partial class MainWindow : Window
   {
     private DispatcherTimer typeTimer;
-    private Int32 zoomLevelPercent = 130;
+    private Int32 fontSize = 20;
     private Int32 lineSpaceX10 = 20;
-    private String fontFamilyName = "Arial";
+    private String fontFamilyName = "Yu Gothic UI";
+
+    public List<FontFamily> SortedFontList
+    {
+      get
+      {
+        var fontFamiliesList = Fonts.SystemFontFamilies.ToList();
+        fontFamiliesList.Sort((x, y) => x.Source.CompareTo(y.Source));
+        return fontFamiliesList;
+      }
+    }
 
     private HashSet<Char> katakanaSet = new HashSet<Char>();
 
@@ -38,7 +48,7 @@ namespace JapaneseSpacer
 
       foreach (FontFamily font in fontComboBox.Items)
       {
-        if (font.Source == "Arial")
+        if (font.FamilyNames.Values.Contains("Yu Gothic UI"))
         {
           fontComboBox.SelectedItem = font;
           break;
@@ -69,9 +79,10 @@ namespace JapaneseSpacer
       if (resultBrowser.Document != null)
         if (resultBrowser.Document.Body != null)
         {
-          resultBrowser.Document.Body.Style = $"zoom:{zoomLevelPercent}%;" +
+          resultBrowser.Document.Body.Style = $"font-size: {fontSize}pt;" +
                                               $"line-height:{lineSpaceX10 / 10f};" +
-                                              $"font-family:{fontFamilyName};";
+                                              $"font-family:{fontFamilyName};" +
+                                              $"text-shadow: 0 0 1px rgba(0,0,0,0.3);";
         }
     }
 
@@ -94,11 +105,14 @@ namespace JapaneseSpacer
           sentence += "。";
 
         var phonemes = JapanesePhoneticAnalyzer.GetWords(sentence, false).ToList();
+        JapanesePhoneme previousPhoneme = null;
         foreach (var phoneme in phonemes)
         {
           if (phoneme.IsPhraseStart)
-            if (Char.IsLetter(phoneme.DisplayText[0]))
+            if (Char.IsLetter(phoneme.DisplayText[0])
+              && Char.IsLetter(previousPhoneme == null? '-' : previousPhoneme.DisplayText.Last())) // Make sure we don't add spaces after non-letter characters.
               stringBuilder.Append("<ruby>　</ruby>");
+          previousPhoneme = phoneme;
 
           // Original text part
           stringBuilder.Append($"<ruby><rb>{phoneme.DisplayText}</rb>");
@@ -134,15 +148,15 @@ namespace JapaneseSpacer
 
     private void OnFontSizeUpButton_Click(Object sender, RoutedEventArgs e)
     {
-      zoomLevelPercent += 10;
+      fontSize += 1;
       ApplyStyle();
     }
 
     private void OnFontsizeDownButton_Click(Object sender, RoutedEventArgs e)
     {
-      if (zoomLevelPercent > 100)
+      if (fontSize > 8)
       {
-        zoomLevelPercent -= 10;
+        fontSize -= 1;
         ApplyStyle();
       }
     }
