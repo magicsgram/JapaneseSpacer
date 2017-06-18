@@ -93,17 +93,30 @@ namespace JapaneseSpacer
 
       Boolean shouldShowFurigana = furiganaCheckBox.IsChecked.Value;
 
-      String inputText = inputTextBox.Text;
-      String[] sentences = inputText.Split('。');
+      String inputText = inputTextBox.Text.Trim();
+      // Perform very rigorous sentence splitter,
+      // because JapanesePhoneticAnalyzer doesn't accept a sentence w/ length greater than 100.
+      List<String> sentences = new List<String>();
+      Int32 sentenceStartingIndex = 0;
+      for (Int32 i = 0; i < inputText.Length; ++i)
+      {
+        if (!Char.IsLetterOrDigit(inputText[i])) // Sentence split detected
+        {
+          String newSentence = inputText.Substring(sentenceStartingIndex, i - sentenceStartingIndex + 1);
+          sentences.Add(newSentence);
+          sentenceStartingIndex = i + 1;
+        }
+      }
+      if (sentenceStartingIndex < inputText.Length) // Clean up needed
+      {
+        String newSentence = inputText.Substring(sentenceStartingIndex, inputText.Length - sentenceStartingIndex);
+        sentences.Add(newSentence);
+      }
 
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.Append("<meta charset=\"utf-8\"/>");
-      for (Int32 i = 0; i < sentences.Length; ++i)
+      foreach (String sentence in sentences)
       {
-        String sentence = sentences[i];
-        if (i < sentence.Length - 1) // if not last sentence, append period
-          sentence += "。";
-
         var phonemes = JapanesePhoneticAnalyzer.GetWords(sentence, false).ToList();
         JapanesePhoneme previousPhoneme = null;
         foreach (var phoneme in phonemes)
