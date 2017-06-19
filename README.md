@@ -14,6 +14,9 @@ Download the latest binary from https://github.com/magicsgram/JapaneseSpacer/raw
 3. Type or copy-paste japanese text onto the "text" area to the left.
 4. The spaced(+furigana) result should automatically show up to the right.
 
+# Screenshot
+![alt text](https://github.com/magicsgram/JapaneseSpacer/raw/master/ScreenShots/1.3-1.PNG "Screenshot")
+
 # Release Node
 ## Release 1.0
   - Initial release
