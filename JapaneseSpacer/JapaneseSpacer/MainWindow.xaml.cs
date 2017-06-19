@@ -81,8 +81,7 @@ namespace JapaneseSpacer
         {
           resultBrowser.Document.Body.Style = $"font-size: {fontSize}pt;" +
                                               $"line-height:{lineSpaceX10 / 10f};" +
-                                              $"font-family:{fontFamilyName};" +
-                                              $"text-shadow: 0 0 1px rgba(0,0,0,0.3);";
+                                              $"font-family:{fontFamilyName};";
         }
     }
 
@@ -94,30 +93,31 @@ namespace JapaneseSpacer
       Boolean shouldShowFurigana = furiganaCheckBox.IsChecked.Value;
 
       String inputText = inputTextBox.Text.Trim();
-      // Perform very rigorous sentence splitter,
+      // Perform very rigorous sentence splitter by splitting based on non-letter characters such as period and parentheses and etc.,
       // because JapanesePhoneticAnalyzer doesn't accept a sentence w/ length greater than 100.
-      List<String> sentences = new List<String>();
-      Int32 sentenceStartingIndex = 0;
+      // Thus, a sentence may be split further into multiple chunks.
+      List<String> wordChunks = new List<String>();
+      Int32 chunkStartingIndex = 0;
       for (Int32 i = 0; i < inputText.Length; ++i)
       {
         if (!Char.IsLetterOrDigit(inputText[i])) // Sentence split detected
         {
-          String newSentence = inputText.Substring(sentenceStartingIndex, i - sentenceStartingIndex + 1);
-          sentences.Add(newSentence);
-          sentenceStartingIndex = i + 1;
+          String newChunk = inputText.Substring(chunkStartingIndex, i - chunkStartingIndex + 1);
+          wordChunks.Add(newChunk);
+          chunkStartingIndex = i + 1;
         }
       }
-      if (sentenceStartingIndex < inputText.Length) // Clean up needed
+      if (chunkStartingIndex < inputText.Length) // Clean up needed
       {
-        String newSentence = inputText.Substring(sentenceStartingIndex, inputText.Length - sentenceStartingIndex);
-        sentences.Add(newSentence);
+        String newChunk = inputText.Substring(chunkStartingIndex, inputText.Length - chunkStartingIndex);
+        wordChunks.Add(newChunk);
       }
 
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.Append("<meta charset=\"utf-8\"/>");
-      foreach (String sentence in sentences)
+      foreach (String chunk in wordChunks)
       {
-        var phonemes = JapanesePhoneticAnalyzer.GetWords(sentence, false).ToList();
+        var phonemes = JapanesePhoneticAnalyzer.GetWords(chunk, false).ToList();
         JapanesePhoneme previousPhoneme = null;
         foreach (var phoneme in phonemes)
         {

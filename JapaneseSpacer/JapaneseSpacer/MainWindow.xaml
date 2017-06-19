@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:JapaneseSpacer"
         xmlns:Control="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         mc:Ignorable="d"
-        Title="Japanese Spacer 1.3 Dev" Height="350" Width="525" MinWidth="500" MinHeight="300">
+        Title="Japanese Spacer 1.3" Height="350" Width="525" MinWidth="500" MinHeight="300">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="25"/>
