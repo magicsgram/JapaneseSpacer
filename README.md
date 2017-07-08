@@ -27,3 +27,5 @@ Download the latest binary from https://github.com/magicsgram/JapaneseSpacer/raw
 ## Release 1.3
   - Allowed users to choose the font, defaulted to <Yu Gothic UI> shipped with Windows 10
   - Perform more rigorous sentence splitting into multiple chunks, because JapanesePhoneticAnalyzer api does not accept a string w/ length greater than 100
+## Reelease 1.4
+  - Addded a mode to show everything in Hiragana only

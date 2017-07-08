@@ -90,7 +90,7 @@ namespace JapaneseSpacer
       if (!IsInitialized)
         return;
 
-      Boolean shouldShowFurigana = furiganaCheckBox.IsChecked.Value;
+      Int32 operationMode = modeComboBox.SelectedIndex;
 
       String inputText = inputTextBox.Text.Trim();
       // Perform very rigorous sentence splitter by splitting based on non-letter characters such as period and parentheses and etc.,
@@ -127,13 +127,25 @@ namespace JapaneseSpacer
               stringBuilder.Append("<ruby>　</ruby>");
           previousPhoneme = phoneme;
 
-          // Original text part
-          stringBuilder.Append($"<ruby><rb>{phoneme.DisplayText}</rb>");
-          // Furigana part
-          if (shouldShowFurigana && phoneme.DisplayText != phoneme.YomiText
-            && !katakanaSet.Contains(phoneme.DisplayText[0]) && Char.IsLetter(phoneme.DisplayText[0])) // Furigana needs to be displayed
-            stringBuilder.Append($"<rt>{phoneme.YomiText}</rt>");
-          stringBuilder.Append("</ruby>");
+          switch (operationMode)
+          {
+            case 0: // Add Spaces Only
+              stringBuilder.Append($"<ruby><rb>{phoneme.DisplayText}</rb></ruby>");
+              break;
+            case 1: // Show Furigana
+              // Original text part
+              stringBuilder.Append($"<ruby><rb>{phoneme.DisplayText}</rb>");
+              // Furigana part
+              if (phoneme.DisplayText != phoneme.YomiText
+                && !katakanaSet.Contains(phoneme.DisplayText[0]) && Char.IsLetter(phoneme.DisplayText[0])) // Furigana needs to be displayed
+                stringBuilder.Append($"<rt>{phoneme.YomiText}</rt>");
+              stringBuilder.Append("</ruby>");
+              break;
+            case 2: // Show in Hiragana
+              stringBuilder.Append($"<ruby><rb>{phoneme.YomiText}</rb></ruby>");
+              break;
+          }
+          
         }
       }
       stringBuilder.Append("</p>");
@@ -154,11 +166,6 @@ namespace JapaneseSpacer
       typeTimer.Start();
     }
 
-    private void OnShowFuriganaCheckBox_CheckedChanged(Object sender, RoutedEventArgs e)
-    {
-      PerformSpacing();
-    }
-
     private void OnFontSizeUpButton_Click(Object sender, RoutedEventArgs e)
     {
       fontSize += 1;
@@ -177,7 +184,7 @@ namespace JapaneseSpacer
     private void OnLineUpButton_Click(Object sender, RoutedEventArgs e)
     {
       lineSpaceX10 += 1;
-      Trace.WriteLine(lineSpaceX10);
+      //Trace.WriteLine(lineSpaceX10);
       ApplyStyle();
     }
 
@@ -195,6 +202,13 @@ namespace JapaneseSpacer
       var fontFamily = e.AddedItems[0] as FontFamily;
       fontFamilyName = fontFamily.Source;
       ApplyStyle();
+    }
+
+    private void OnModeComboBox_SelectionChanged(Object sender, SelectionChangedEventArgs e)
+    {
+      ComboBox modeCombobox = sender as ComboBox;
+      if (modeCombobox.IsInitialized)
+        PerformSpacing();
     }
   }
 }
