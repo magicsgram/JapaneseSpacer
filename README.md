@@ -4,7 +4,7 @@ Japanese written texts don't contain spaces. Japanese Spacer adds spaces in betw
 THIS IS FOR THE BEGINNERS' REFERENCE ONLY! I DO NOT GUARANTEE THE ACCURACY OF THE GLOBALIZATION LIBRARY SHIPPED WITH WIN10.
 
 # Requirements
-  - Windows 10 - 32/64 bit
+  - Windows 10 - 32/64 bit (Japanese Language pack is a MUST, although your system language doesn't have to be in Japanese)
   - .net framework 4.5
 
 # Usage
