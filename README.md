@@ -17,7 +17,7 @@ Download the latest binary from https://github.com/magicsgram/JapaneseSpacer/raw
 # Screenshot
 ![alt text](https://github.com/magicsgram/JapaneseSpacer/raw/master/ScreenShots/1.3-1.PNG "Screenshot")
 
-# Release Node
+# Release Note
 ## Release 1.0
   - Initial release
 ## Release 1.1
